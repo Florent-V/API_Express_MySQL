@@ -27,16 +27,14 @@ const getMovieById = (req, res) => {
 };
 
 const addMovie = (req, res) => {
-  console.log(req.body);
   const {title, director, year, color, duration } = req.body;
-
+  
   database
     .query(
       "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
       [title, director, year, color, duration]
     )
     .then(([result]) => {
-      console.log(result);
       res.location(`/api/movies/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -45,9 +43,28 @@ const addMovie = (req, res) => {
     });
 };
 
+const updateMovie = (req, res) => {
+  const {title, director, year, color, duration } = req.body;
+  const id = parseInt(req.params.id);
+
+  database
+    .query(
+      "UPDATE movies SET title = ?, director = ?, year = ?, color = ?, duration = ? WHERE id = ?",
+      [title, director, year, color, duration, id]
+    )
+    .then(([result]) => {
+      result.affectedRows ? res.sendStatus(204) : res.status(404).send("Not Found");
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error editing the movie");
+    });
+};
+
 
 module.exports = {
   getMovies,
   getMovieById,
   addMovie,
+  updateMovie,
 };
