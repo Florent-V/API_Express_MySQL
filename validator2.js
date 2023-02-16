@@ -109,8 +109,8 @@ const validateMovieExpress = [
   body("color").optional()
     .notEmpty()
     .withMessage('La couleur est obligatoire')
-    .isLength({ max:255 })
-    .withMessage('La longueur maximale est de 255 caractères'),
+    .isBoolean()
+    .withMessage('La saisie est invalide'),
   body("duration")
     .notEmpty()
     .withMessage('La durée est obligatoire')

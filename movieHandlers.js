@@ -1,8 +1,32 @@
 const database = require("./database");
 
 const getMovies = (req, res) => {
+  let baseSql = "SELECT * FROM movies";
+  const sqlValues = [];
+
+  if (req.query.color) {
+    sqlValues.push({
+      criteria: "color =",
+      value: req.query.color
+    });
+  }
+
+  if (req.query.max_duration) {
+    sqlValues.push({
+      criteria: "duration <=",
+      value: req.query.max_duration
+    });
+  }
+
   database
-    .query("select * from movies")
+    .query(
+      sqlValues.reduce(
+        (sql, { criteria }, index) =>
+          `${sql} ${index === 0 ? "where" : "and"} ${criteria} ? `,
+          baseSql
+      ),
+      sqlValues.map(({ value }) => value)
+      )
     .then(([movies]) => {
       res.status(200).json(movies);
     })
