@@ -6,8 +6,8 @@ app.use(express.json());
 
 const movieHandlers = require("./movieHandlers");
 const userHandlers = require("./userHandlers");
-const validator = require("./validator");
 const validator2 = require("./validator2");
+const { hashPassword } = require("./auth.js");
 
 const port = process.env.APP_PORT ?? 5000;
 
@@ -29,11 +29,12 @@ app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
 
 app.get("/api/users", userHandlers.getUsers);
+
 app.get("/api/users/:id", userHandlers.getUserById);
 
-app.post("/api/users", validator2.validateUserExpress, userHandlers.addUser);
+app.post("/api/users", validator2.validateUserExpress, hashPassword, userHandlers.addUser);
 
-app.put("/api/users/:id", validator2.validateUserExpress, userHandlers.updateUser);
+app.put("/api/users/:id", validator2.validateUserExpress, hashPassword, userHandlers.updateUser);
 
 app.delete("/api/users/:id", userHandlers.deleteUser);
 

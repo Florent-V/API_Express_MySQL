@@ -1,7 +1,7 @@
 const database = require('./database');
 
 const getUsers = (req, res) => {
-  let baseSql = "SELECT * FROM users";
+  let baseSql = "SELECT id, firstname, lastname, email, city, language FROM users";
   const sqlValues = [];
 
   if (req.query.language) {
@@ -40,7 +40,7 @@ const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
 
   database
-    .query('select * from users where id = ?', [id])
+    .query('select id, firstname, lastname, email, city, language from users where id = ?', [id])
     .then(([user]) => {
       user[0] ? res.status(200).json(user[0]) : res.status(404).send('Not Found');
     })
@@ -52,12 +52,12 @@ const getUserById = (req, res) => {
 
 const addUser = (req, res) => {
   console.log(req.body);
-  const {firstname, lastname, email, city, language} = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } = req.body;
 
   database
     .query(
-      "INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
-      [firstname, lastname, email, city, language]
+      "INSERT INTO users (firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language, hashedPassword]
     )
     .then(([result]) => {
       console.log(result);
@@ -71,13 +71,13 @@ const addUser = (req, res) => {
 
 
 const updateUser = (req, res) => {
-  const {firstname, lastname, email, city, language} = req.body;
+  const {firstname, lastname, email, city, language, hashedPassword} = req.body;
   const id = parseInt(req.params.id);
 
   database
     .query(
-      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? WHERE  id = ?",
-      [firstname, lastname, email, city, language, id]
+      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ?, hashedPassword = ? WHERE  id = ?",
+      [firstname, lastname, email, city, language, hashedPassword, id]
     )
     .then(([result]) => {
       result.affectedRows ? res.sendStatus(204) : res.status(404).send("Not Found");
