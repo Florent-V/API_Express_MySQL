@@ -44,7 +44,6 @@ const addMovie = (req, res) => {
 };
 
 const updateMovie = (req, res) => {
-  const {title, director, year, color, duration } = req.body;
   const id = parseInt(req.params.id);
 
   database
