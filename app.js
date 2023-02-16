@@ -18,11 +18,14 @@ const welcome = (req, res) => {
 app.get("/", welcome);
 
 app.get("/api/movies", movieHandlers.getMovies);
+
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 
 app.post("/api/movies", validator2.validateMovieExpress, movieHandlers.addMovie);
 
 app.put("/api/movies/:id", validator2.validateMovieExpress, movieHandlers.updateMovie);
+
+app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
 
 app.get("/api/users", userHandlers.getUsers);
@@ -31,6 +34,8 @@ app.get("/api/users/:id", userHandlers.getUserById);
 app.post("/api/users", validator2.validateUserExpress, userHandlers.addUser);
 
 app.put("/api/users/:id", validator2.validateUserExpress, userHandlers.updateUser);
+
+app.delete("/api/users/:id", userHandlers.deleteUser);
 
 
 
