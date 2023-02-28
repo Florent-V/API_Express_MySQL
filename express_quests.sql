@@ -1,63 +1,63 @@
-DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS movie;
 
-CREATE TABLE movies (
+CREATE TABLE movie (
   id int primary key NOT NULL AUTO_INCREMENT,
   title varchar(255) NOT NULL,
   director varchar(255) NOT NULL,
   year varchar(255) NOT NULL,
-  color varchar(255) NOT NULL,
+  description TEXT NOT NULL,
   duration int NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
 
 INSERT INTO
-  movies (title, director, year, color, duration)
+  movie (title, director, year, description, duration)
 VALUES
   (
     'Citizen Kane',
     'Orson Wells',
     '1941',
-    '0',
+    'Description 1',
     120
   ),
   (
     'The Godfather',
     'Francis Ford Coppola',
     '1972',
-    '1',
+    'Description 2',
     180
   ),
   (
     'Pulp Fiction',
     'Quentin Tarantino',
     '1994',
-    '1',
+    'Description 3',
     180
   ),
   (
     'Apocalypse Now',
     'Francis Ford Coppola',
     '1979',
-    '1',
+    'Description 4',
     150
   ),
   (
     '2001 a space odyssey',
     'Stanley Kubrick',
     '1968',
-    '1',
+    'Description 5',
     160
   ),
   (
     'The Dark Knight',
     'Christopher Nolan',
     '2008',
-    '1',
+    'Description 5',
     150
   );
 
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user;
 
-CREATE TABLE users (
+CREATE TABLE user (
     id int primary key NOT NULL AUTO_INCREMENT,
     firstname varchar(255) NOT NULL,
     lastname varchar(255) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE users (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 INSERT INTO
-  users (firstname, lastname, email, city, language, hashedPassword)
+  user (firstname, lastname, email, city, language, hashedPassword)
 VALUES
 (
     'John',

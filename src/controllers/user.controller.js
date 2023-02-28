@@ -1,4 +1,4 @@
-const database = require('./database');
+const database = require('../models/database');
 
 const getUsers = (req, res) => {
   let baseSql = "SELECT id, firstname, lastname, email, city, language FROM users";
