@@ -1,18 +1,101 @@
-/*const AbstractManager = require('./abstractManager');
-const connection = require('./database');
+const db = require('./database');
 
-class MovieManager extends AbstractManager {
+class MovieModel {
   constructor() {
-    super({ table: "movies" });
+    this.table = "movie";
   }
 
+  // C from CRUD : Create One New
+  create = (movie) => {
+    const {title, director, year, description, duration } = movie;
+    return db.execute(`INSERT INTO ${this.table} (title, director, year, description, duration) VALUES (?, ?, ?, ?, ?)`,
+    [
+      title,
+      director,
+      year,
+      description,
+      duration
+    ]);
+  };
+
+  // R from CRUD : Get All With Filters
+
+  getAll = (req) => {
+    let baseSql = `SELECT * FROM ${this.table}`;
+    const sqlValues = [];
+
+    if (req.query.year) {
+      sqlValues.push({
+        criteria: "year =",
+        value: req.query.year
+      });
+    }
+
+    if (req.query.max_duration) {
+      sqlValues.push({
+        criteria: "duration <=",
+        value: req.query.max_duration
+      });
+    }
+
+    if (req.query.min_duration) {
+      sqlValues.push({
+        criteria: "duration >=",
+        value: req.query.min_duration
+      });
+    }
+
+    let query = sqlValues.reduce(
+      (sql, { criteria }, index) =>
+        `${sql} ${index === 0 ? "where" : "and"} ${criteria} ? `,
+        baseSql
+    );
+
+    console.log(query);
+    console.log(sqlValues);
+
+    return db.execute(
+      sqlValues.reduce(
+        (sql, { criteria }, index) =>
+          `${sql} ${index === 0 ? "where" : "and"} ${criteria} ? `,
+          baseSql
+      ),
+      sqlValues.map(({ value }) => value)
+    );
+  };
+
+
+  //R from CRUD : Get One By ID
+  getById = (id) => {
+    return db.execute(`SELECT * FROM ${this.table} WHERE id = ?`, [id]);
+  };
+
+
+  //U from CRUD : Update One By ID
+  updateById = (movie) => {
+    const { title, director, year, description, duration, id } = movie;
+    return db.execute(`UPDATE ${this.table} SET title = ?, director = ?, year = ?, description = ?, duration = ? WHERE id = ?`,
+    [ 
+      title,
+      director,
+      year,
+      description,
+      duration,
+      id
+    ]);
+  };
+
+
+  //D from CRUD : Delete One By ID
+  deleteById = (id) => {
+    return db.execute(`DELETE FROM ${this.table} WHERE id = ?`, [id]);
+  };
 
 }
 
-module.exports = new MovieManager();*/
+module.exports = new MovieModel();
 
-const db = require('./database');
-
+/*
 const Movie = function(movie) {
   this.title = movie.title;
   this.director = movie.director;
@@ -21,18 +104,7 @@ const Movie = function(movie) {
   this.duration = movie.duration;
 }
 
-// C from CRUD : Create One New
-Movie.create = (movie) => {
-  const {title, director, year, description, duration } = movie;
-  return db.execute('INSERT INTO movie (title, director, year, description, duration) VALUES (?, ?, ?, ?, ?)',
-  [
-    title,
-    director,
-    year,
-    description,
-    duration
-  ]);
-};
+
 
 // R from CRUD : Get All With Filters
 
@@ -101,3 +173,4 @@ Movie.deleteById = (id) => {
 };
 
 module.exports = Movie;
+*/

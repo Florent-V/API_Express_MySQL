@@ -1,4 +1,6 @@
+DROP TABLE IF EXISTS book;
 DROP TABLE IF EXISTS movie;
+DROP TABLE IF EXISTS user;
 
 CREATE TABLE movie (
   id int primary key NOT NULL AUTO_INCREMENT,
@@ -8,6 +10,25 @@ CREATE TABLE movie (
   description TEXT NOT NULL,
   duration int NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
+
+CREATE TABLE book (
+  id int primary key NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  author varchar(255) NOT NULL,
+  year varchar(255) NOT NULL,
+  description TEXT NOT NULL,
+  pages int NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
+
+CREATE TABLE user (
+    id int primary key NOT NULL AUTO_INCREMENT,
+    firstname varchar(255) NOT NULL,
+    lastname varchar(255) NOT NULL,
+    email varchar(255) UNIQUE NOT NULL,
+    city varchar(255) DEFAULT NULL,
+    language varchar(255) DEFAULT NULL,
+    hashedPassword varchar(255) NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 INSERT INTO
   movie (title, director, year, description, duration)
@@ -55,17 +76,52 @@ VALUES
     150
   );
 
-DROP TABLE IF EXISTS user;
+INSERT INTO
+  book (title, author, year, description, pages)
+VALUES
+  (
+    'Le syndrome E',
+    'Franck Thilliez',
+    '2000',
+    'Description 1',
+    240
+  ),
+  (
+    'Gataka',
+    'Franck Thilliez',
+    '2005',
+    'Description 2',
+    325
+  ),
+  (
+    'Puzzle',
+    'Franck Thilliez',
+    '2010',
+    'Description 3',
+    280
+  ),
+  (
+    'Un avion sans elle',
+    'Michel Bussi',
+    '2012',
+    'Description 4',
+    340
+  ),
+  (
+    'Maman a tort',
+    'Michel Bussi',
+    '2015',
+    'Description 5',
+    280
+  ),
+  (
+    'Le temps est assassin',
+    'Michel Bussi',
+    '2016',
+    'Description 5',
+    310
+  );
 
-CREATE TABLE user (
-    id int primary key NOT NULL AUTO_INCREMENT,
-    firstname varchar(255) NOT NULL,
-    lastname varchar(255) NOT NULL,
-    email varchar(255) UNIQUE NOT NULL,
-    city varchar(255) DEFAULT NULL,
-    language varchar(255) DEFAULT NULL,
-    hashedPassword varchar(255) NOT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 INSERT INTO
   user (firstname, lastname, email, city, language, hashedPassword)

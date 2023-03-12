@@ -1,14 +1,12 @@
-require("dotenv").config();
-
 const express = require("express");
 
 //Import des modules
 const cors = require('cors');
-
+const cookieParser = require("cookie-parser");
 
 //Import des routes
 const movieRoutes = require('./routes/movie.routes');
-const tutorialRoutes = require('./routes/tutorial.routes');
+const bookRoutes = require('./routes/book.routes')
 const userRoutes = require('./routes/user.routes');
 
 /*
@@ -17,7 +15,6 @@ const loginHandlers = require("./controllers/loginHandlers");
 const validator2 = require("../validator2");
 const { hashPassword, verifyPassword, verifyToken, verifyAccess } = require("./services/auth.js");
 */
-
 
 const app = express();
 
@@ -28,9 +25,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(express.json());
-
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -46,9 +43,9 @@ const welcome = (req, res) => {
 
 app.get("/", welcome);
 
+// API routes
 app.use('/api/movies', movieRoutes);
-app.use('/api/tutorials', tutorialRoutes);
+app.use('/api/books', bookRoutes)
 app.use('/api/users', userRoutes);
-
 
 module.exports = app;

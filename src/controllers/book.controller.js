@@ -1,42 +1,42 @@
-const Movie = require("../models/movie.model");
+const Book = require("../models/book.model");
 
-const movieController = {};
+const bookController = {};
 
-// C from CRUD : Create One New
-movieController.create = (req, res, next) => {
-  console.log(req.body);
+// Create and Save a new Book
+bookController.create = (req, res, next) => {
+  // Validate request
   if (!req.body) {
     res.status(400).json({
-      message: "Content cannot be empty !"
+      message: "Content can not be empty!"
     });
   }
 
-  const movie = {
+  const book = {
     ...req.body
   };
 
-  Movie.create(movie)
+  // Save Book in the database
+  Book.create(book)
     .then(([result]) => {
-      res.status(201).json({ id: result.insertId, message: "Movie Created" });
+      res.status(201).json({ id: result.insertId, message: "Book Created" });
       //res.location(`/api/movies/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json({
-        error: "Error saving the movie",
+        error: "Error saving the book",
         msg: err
       });
       next(err);
     });
 };
 
-
 // R from CRUD : Get All With Filters
-movieController.getAll = (req, res, next) => {
+bookController.getAll = (req, res, next) => {
   console.log(req.query);
-  Movie.getAll(req)
-    .then(([movies]) => {
-      res.status(200).json(movies);
+  Book.getAll(req)
+    .then(([books]) => {
+      res.status(200).json(books);
     })
     .catch((err) => {
       console.log(err);
@@ -46,11 +46,11 @@ movieController.getAll = (req, res, next) => {
 };
 
 //R from CRUD : Get One By ID
-movieController.getById = (req, res, next) => {
+bookController.getById = (req, res, next) => {
   const id = parseInt(req.params.id);
-  Movie.getById(id)
-    .then(([movie]) => {
-      (movie[0]) ? res.status(200).json(movie[0]) : res.status(404).send('Not Found');
+  Book.getById(id)
+    .then(([book]) => {
+      (book[0]) ? res.status(200).json(book[0]) : res.status(404).send('Not Found');
     })
     .catch((err) => {
       console.log(err);
@@ -62,9 +62,8 @@ movieController.getById = (req, res, next) => {
     });
 };
 
-
 //U from CRUD : Update One By ID
-movieController.updateById = (req, res, next) => {
+bookController.updateById = (req, res, next) => {
 
   if (!req.body) {
     res.status(400).json({message: "Content cannot be empty !"});
@@ -72,12 +71,12 @@ movieController.updateById = (req, res, next) => {
 
   const id = parseInt(req.params.id);
 
-  const movie = {
+  const book = {
     ...req.body,
     id,
   };
 
-  Movie.updateById(movie)
+  Book.updateById(book)
     .then(([result]) => {
       result.affectedRows ? res.sendStatus(204) : res.status(404).send("Not Found");
     })
@@ -91,11 +90,10 @@ movieController.updateById = (req, res, next) => {
     });
 };
 
-
 //D from CRUD : Delete One By ID
-movieController.deleteById = (req, res, next) => {
+bookController.deleteById = (req, res, next) => {
   const id = req.params.id;
-  Movie.deleteById(id)
+  Book.deleteById(id)
     .then(([result]) => {
       result.affectedRows ? res.sendStatus(204) : res.status(404).send("Not Found");
     })
@@ -110,4 +108,5 @@ movieController.deleteById = (req, res, next) => {
 };
 
 
-module.exports = movieController;
+
+module.exports = bookController;

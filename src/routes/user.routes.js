@@ -1,7 +1,7 @@
 const userHandler = require('../controllers/user.controller');
 const router = require('express').Router();
 
-const validator2 = require('../middleware/validator2');
+const validator2 = require('../middleware/express_validator');
 const { hashPassword, verifyPassword, verifyToken, verifyAccess } = require("../middleware/auth");
 
 router.get("/api/users", userHandler.getUsers);
