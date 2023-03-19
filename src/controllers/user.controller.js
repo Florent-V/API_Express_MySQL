@@ -65,6 +65,31 @@ userController.getById = (req, res, next) => {
     });
 };
 
+//R from CRUD : Get One By Email
+userController.getUserByEmailWithPassword = (req, res, next) => {
+  const { email } = req.body;
+
+  User.getByEmail(email)
+    .then(([user]) => {
+      if (user[0]) {
+      req.user = user[0];
+      next()
+    } else {
+      res.status(401).send("Unauthorized");
+    }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        error: "Error retrieving data from database",
+        msg: err
+      });
+      next(err);
+    });
+};
+
+
+
 //U from CRUD : Update One By ID
 userController.updateById = (req, res, next) => {
 
@@ -112,25 +137,7 @@ userController.deleteById = (req, res, next) => {
 
 
 
-const getUserByEmailWithPassword = (req, res, next) => {
-  const { email } = req.body;
 
-  database
-  .query('select * from users where email = ?', [email])
-  .then(([user]) => {
-    if (user[0]) {
-      req.user = user[0];
-      next()
-    } else {
-      res.status(401).send("Unauthorized");
-    }
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error retrieving data from database');
-  })
-
-}
 
 const addUser = (req, res) => {
   const { firstname, lastname, email, city, language, hashedPassword } = req.body;

@@ -19,10 +19,16 @@ const validateUserExpress = [
     .withMessage('Le nom est obligatoire')
     .isLength({ max: 255})
     .withMessage('La longueur maximale est de 255 caractères'),
-  body("city").optional()
+  body("city")
+    .optional()
     .isLength({ max:255 })
     .withMessage('La longueur maximale est de 255 caractères'),
   body("language")
+    .optional()
+    .isLength({ max:255 })
+    .withMessage('La longueur maximale est de 255 caractères'),
+  body("password")
+    .notEmpty()
     .isLength({ max:255 })
     .withMessage('La longueur maximale est de 255 caractères'),
   (req, res, next) => {

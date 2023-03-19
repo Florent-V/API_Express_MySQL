@@ -71,6 +71,11 @@ class UserModel {
     return db.execute(`SELECT id, firstname, lastname, email, city, language FROM ${this.table} WHERE id = ?`, [id]);
   };
 
+  //R from CRUD : Get One By ID
+  getByEmail = (email) => {
+    return db.execute(`SELECT * FROM ${this.table} WHERE email = ?`, [email]);
+  };
+
   //U from CRUD : Update One By ID
   updateById = (user) => {
     const { firstname, lastname, email, city, language, hashedPassword, id } = user;

@@ -81,7 +81,7 @@ const verifyAccess = (req, res, next) => {
   const id = parseInt(req.params.id);
 
   try {
-    if (!req.payload.sub === id) {
+    if (req.payload.sub != id) {
       throw new Error("Forbidden");
     }
   
