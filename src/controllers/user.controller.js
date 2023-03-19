@@ -1,54 +1,116 @@
-const database = require('../models/database');
+const User = require('../models/user.model');
 
-const getUsers = (req, res) => {
-  let baseSql = "SELECT id, firstname, lastname, email, city, language FROM users";
-  const sqlValues = [];
+const userController = {};
 
-  if (req.query.language) {
-    sqlValues.push({
-      criteria: "language =",
-      value: req.query.language
+// Create and Save a new User
+userController.create = (req, res, next) => {
+  // Validate request
+  if (!req.body) {
+    res.status(400).json({
+      message: "Content can not be empty!"
     });
   }
 
-  if (req.query.city) {
-    sqlValues.push({
-      criteria: "city =",
-      value: req.query.city
-    });
-  }
+  const user = {
+    ...req.body
+  };
 
-  database
-    .query(
-      sqlValues.reduce(
-        (sql, { criteria }, index) =>
-          `${sql} ${index === 0 ? "where" : "and"} ${criteria} ? `,
-          baseSql
-      ),
-      sqlValues.map(({ value }) => value)
-      )
+  // Save User in the database
+  User.create(user)
+    .then(([result]) => {
+      res.status(201).json({ id: result.insertId, message: "User Created" });
+      //res.location(`/api/users/${result.insertId}`).sendStatus(201);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "Error saving the user",
+        msg: err
+      });
+      next(err);
+    });
+};
+
+// R from CRUD : Get All With Filters
+userController.getAll = (req, res, next) => {
+  console.log(req.query);
+  User.getAll(req)
     .then(([users]) => {
       res.status(200).json(users);
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send('Error retrieving data from database');
+      res.status(500).json({
+        error: "Error retrieving data from database",
+        msg: err
+      });
+      next(err);
     });
 };
 
-const getUserById = (req, res) => {
+//R from CRUD : Get One By ID
+userController.getById = (req, res, next) => {
   const id = parseInt(req.params.id);
-
-  database
-    .query('select id, firstname, lastname, email, city, language from users where id = ?', [id])
+  User.getById(id)
     .then(([user]) => {
-      user[0] ? res.status(200).json(user[0]) : res.status(404).send('Not Found');
+      (user[0] ? res.status(200).json(user[0]) : res.status(404).send('Not Found'));
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send('Error retrieving data from database');
-    })
+      res.status(500).json({
+        error: "Error retrieving data from database",
+        msg: err
+      });
+      next(err);
+    });
 };
+
+//U from CRUD : Update One By ID
+userController.updateById = (req, res, next) => {
+
+  if (!req.body) {
+    res.status(400).json({message: "Content cannot be empty !"});
+  }
+
+  const id = parseInt(req.params.id);
+
+  const user = {
+    ...req.body,
+    id,
+  };
+
+  User.updateById(user)
+    .then(([result]) => {
+      result.affectedRows ? res.sendStatus(204) : res.status(404).send("Not Found");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "Error editing data from database",
+        msg: err
+      });
+      next(err);
+    });
+};
+
+//D from CRUD : Delete One By ID
+userController.deleteById = (req, res, next) => {
+  const id = parseInt(req.params.id);
+  User.deleteById(id)
+    .then(([result]) => {
+      result.affectedRows ? res.sendStatus(204) : res.status(404).send("Not Found");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "Error deleting data from database",
+        msg: err
+      });
+      next(err);
+    });
+};
+
+
 
 const getUserByEmailWithPassword = (req, res, next) => {
   const { email } = req.body;
@@ -124,11 +186,4 @@ const deleteUser = (req, res) => {
     })
 }
 
-module.exports = {
-  getUsers,
-  getUserById,
-  getUserByEmailWithPassword,
-  addUser,
-  updateUser,
-  deleteUser,
-}
+module.exports = userController;

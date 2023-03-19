@@ -40,7 +40,10 @@ bookController.getAll = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ err });
+      res.status(500).json({
+        error: "Error retrieving data from database",
+        msg: err
+      });
       next(err);
     });
 };
@@ -53,7 +56,7 @@ bookController.getById = (req, res, next) => {
       (book[0]) ? res.status(200).json(book[0]) : res.status(404).send('Not Found');
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       res.status(500).json({
         error: "Error retrieving data from database",
         msg: err

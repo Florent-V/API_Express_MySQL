@@ -9,7 +9,6 @@ const hashingOptions = {
   parallelism: 1,
 }
 
-
 const hashPassword = (req, res, next) => {
  
   argon2

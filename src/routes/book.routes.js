@@ -3,6 +3,8 @@ const router = require("express").Router();
 const bookController = require('../controllers/book.controller');
 const validator = require('../middleware/express_validator');
 
+//Route /api/books
+
 // Retrieve all books
 router.get("/", bookController.getAll);
 // Retrieve a single book with id
