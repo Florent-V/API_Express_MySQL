@@ -9,13 +9,6 @@ const movieRoutes = require('./routes/movie.routes');
 const bookRoutes = require('./routes/book.routes')
 const userRoutes = require('./routes/user.routes');
 
-/*
-const userHandlers = require("../userHandlers");
-const loginHandlers = require("./controllers/loginHandlers");
-const validator2 = require("../validator2");
-const { hashPassword, verifyPassword, verifyToken, verifyAccess } = require("./services/auth.js");
-*/
-
 const app = express();
 
 const corsOptions = {
